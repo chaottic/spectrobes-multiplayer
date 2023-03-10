@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL46.*;
-import static org.lwjgl.system.MemoryUtil.memAddress;
+import static org.lwjgl.system.MemoryUtil.*;
 
 public final class EntityDrawer {
     private final ProgramPipeline.Tuple tuple;
@@ -41,6 +41,34 @@ public final class EntityDrawer {
 
             glVertexArrayElementBuffer(vao, ebo);
 
+            var mesh = memCalloc(88);
+
+            mesh
+                    .putFloat(-0.5F).putFloat(-0.5F).putFloat(0.0F).putFloat(1.0F)
+                    .putFloat( 0.5F).putFloat(-0.5F).putFloat(0.0F).putFloat(1.0F)
+                    .putFloat( 0.5F).putFloat( 0.5F).putFloat(0.0F).putFloat(1.0F)
+                    .putFloat(-0.5F).putFloat( 0.5F).putFloat(0.0F).putFloat(1.0F);
+
+            mesh
+                    .putInt(0).putInt(1).putInt(2)
+                    .putInt(2).putInt(3).putInt(0);
+
+            mesh.flip();
+
+            var vertices = 16 * 4;
+            var elements = 6 * 4;
+
+            mesh.limit(vertices);
+            glNamedBufferStorage(vbo, mesh,0);
+            mesh.position(vertices);
+
+            mesh.limit(vertices + elements);
+            glNamedBufferStorage(ebo, mesh, 0);
+            mesh.position(0);
+
+            memFree(mesh);
+
+            // Pipeline.
             tuple = ProgramPipeline.createTuple("entity", stack);
 
             var vertex = tuple.vertex();
@@ -48,11 +76,12 @@ public final class EntityDrawer {
             viewUniformLocation = glGetUniformLocation(vertex, "view");
             modelUniformLocationl = glGetUniformLocation(vertex, "model");
 
+            // Texture.
             var paths = List.of(
                     "texture/rallen/rallen_down.png",
                     "texture/rallen/rallen_left.png",
                     "texture/rallen/rallen_right.png",
-                    "texture/rallen/rallen/up.png");
+                    "texture/rallen/rallen_up.png");
 
             glBindTextureUnit(0, Texture.createTextureArray(paths, stack, 64, 64));
         } catch (IOException e) {
@@ -61,18 +90,31 @@ public final class EntityDrawer {
     }
 
     public void draw(List<Entity> entities, Matrix4f projection, Matrix4f view, Matrix4f model) {
+        glBindProgramPipeline(tuple.pipeline());
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             var buffer = stack.callocFloat(16);
 
+            var vertex = tuple.vertex();
+            glProgramUniformMatrix4fv(vertex, projectionUniformLocation, false, projection.get(buffer));
+            glProgramUniformMatrix4fv(vertex, viewUniformLocation, false, view.get(buffer));
+            glProgramUniformMatrix4fv(vertex, modelUniformLocationl, false, model.get(buffer));
         }
 
         glBindVertexArray(vao);
 
         glEnableVertexArrayAttrib(vao, 0);
 
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         glDisableVertexArrayAttrib(vao, 0);
 
         glBindVertexArray(0);
+
+        glBindProgramPipeline(0);
+    }
+
+    private void animate() {
+
     }
 }

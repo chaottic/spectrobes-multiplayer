@@ -1,11 +1,16 @@
 package com.chaottic.spectrobes;
 
+import com.chaottic.spectrobes.entity.Entity;
+import com.chaottic.spectrobes.graphics.drawer.EntityDrawer;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
+import java.util.List;
+
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.system.MemoryUtil.memAddress;
 
@@ -46,7 +51,16 @@ public final class Window {
         var view = new Matrix4f();
         var model = new Matrix4f();
 
+        var entityDrawer = new EntityDrawer();
+        var entity = new Entity();
+        var entities = List.of(entity);
+
+        glClearColor(1.0F, 0.0F, 0.0F, 0.0F);
+
         while (!glfwWindowShouldClose(window)) {
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            entityDrawer.draw(entities, projection, view, model);
 
             glfwSwapBuffers(window);
             glfwPollEvents();
