@@ -20,7 +20,6 @@ public final class SpectrobesClient {
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.AUTO_CLOSE, true)
                     .handler(new ChannelInitializer<SocketChannel>() {
-
                         @Override
                         protected void initChannel(@NotNull SocketChannel ch) throws Exception {
 

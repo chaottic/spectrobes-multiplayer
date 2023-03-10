@@ -1,5 +1,6 @@
 package com.chaottic.spectrobes;
 
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
@@ -41,6 +42,9 @@ public final class Window {
     }
 
     public void draw() {
+        var projection = new Matrix4f();
+        var view = new Matrix4f();
+        var model = new Matrix4f();
 
         while (!glfwWindowShouldClose(window)) {
 

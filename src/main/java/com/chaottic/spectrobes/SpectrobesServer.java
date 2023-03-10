@@ -3,19 +3,14 @@ package com.chaottic.spectrobes;
 import com.chaottic.spectrobes.packet.PacketDecoder;
 import com.chaottic.spectrobes.packet.PacketEncoder;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.ReplayingDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public final class SpectrobesServer {
 

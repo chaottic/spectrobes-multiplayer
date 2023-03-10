@@ -16,8 +16,11 @@ public final class Main {
         var host = "Debug";
         var port = 8080;
 
-        var server = new SpectrobesServer();
-        server.host(host, port);
+        new Thread(() -> {
+            var server = new SpectrobesServer();
+            server.host(host, port);
+
+        }).start();
 
         var client = new SpectrobesClient();
         client.connect(host, port);
