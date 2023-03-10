@@ -13,6 +13,15 @@ public final class Main {
             throw new RuntimeException("Failed to initialise GLFW");
         }
 
+        var host = "Debug";
+        var port = 8080;
+
+        var server = new SpectrobesServer();
+        server.host(host, port);
+
+        var client = new SpectrobesClient();
+        client.connect(host, port);
+
         var window = new Window();
         window.draw();
         window.destroy();
