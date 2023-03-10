@@ -5,7 +5,8 @@ import static org.lwjgl.glfw.GLFW.glfwTerminate;
 
 public final class Main {
 
-    private Main() {}
+    private Main() {
+    }
 
     public static void main(String[] args) {
 
@@ -13,20 +14,19 @@ public final class Main {
             throw new RuntimeException("Failed to initialise GLFW");
         }
 
-        var host = "Debug";
+        var host = "localhost";
         var port = 8080;
 
         new Thread(() -> {
             var server = new SpectrobesServer();
             server.host(host, port);
-
         }).start();
 
         var client = new SpectrobesClient();
         client.connect(host, port);
 
         var window = new Window();
-        window.draw();
+        window.draw(client);
         window.destroy();
 
         glfwTerminate();

@@ -41,7 +41,7 @@ public final class Window {
         GL.createCapabilities();
     }
 
-    public void draw() {
+    public void draw(SpectrobesClient client) {
         var projection = new Matrix4f();
         var view = new Matrix4f();
         var model = new Matrix4f();
