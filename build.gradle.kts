@@ -12,6 +12,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -24,6 +25,7 @@ dependencies {
     implementation("org.jetbrains:annotations:23.0.0")
 
     lwjgl {
+        snapshot.`3_3_2`
         implementation(core, glfw, opengl, stb)
     }
 }

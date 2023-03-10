@@ -13,6 +13,10 @@ public final class Main {
             throw new RuntimeException("Failed to initialise GLFW");
         }
 
+        var window = new Window();
+        window.draw();
+        window.destroy();
+
         glfwTerminate();
     }
 }
